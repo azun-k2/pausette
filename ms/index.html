@@ -52,6 +52,7 @@
 <body>
 <main>
 <div class="hero">
+  <div class="hero-pill">🌿 Gentle break reminder · Calms your eyes and back</div>
   <img class="icon" src="../icon-512.png" alt="" width="112" height="112">
   <h1>Pausette</h1>
   <p class="tagline">Rehatkan mata. Regangkan badan. Kemudian sambung semula.</p>
@@ -106,6 +107,81 @@
   </details><!-- /family:nav -->
   </nav>
 </div>
+<div class="demo-wrapper" id="demo">
+  <div class="pausette-stage" role="group" aria-label="Interactive demo: breathing rhythm and gentle break reminder">
+    <div id="psBreatheRing" class="pausette-breathe-ring">
+      <div id="psTimer" class="pausette-timer-text">19:45</div>
+      <div id="psBreatheSub" class="pausette-breathe-sub">Breathe in & out</div>
+    </div>
+    <div class="pausette-prompt-box">
+      <div id="psPromptTitle" class="pausette-prompt-title">Eye break (20-20-20 rule)</div>
+      <div id="psPromptDesc" class="pausette-prompt-desc">Every 20 minutes, spend 20 seconds looking at something 20 feet away to relax your eyes.</div>
+    </div>
+    <div class="demo-controls">
+      <button id="psTriggerBtn" class="tockette-action-btn">Preview Gentle Break</button>
+    </div>
+    <div class="demo-controls">
+      <button class="app-chip active" data-rule="20">👀 20-20-20 Eyes</button>
+      <button class="app-chip" data-rule="50">⏳ 50m Focus</button>
+      <button class="app-chip" data-rule="5">☕ 5m Rest</button>
+    </div>
+    <span class="demo-hint">💡 Click Preview Gentle Break to watch the calming pulse, or choose a break rhythm</span>
+  </div>
+  <p class="demo-note">Visual simulation. In the Mac menu bar, Pausette gently dims your screen and offers natural chimes without jarring lockouts.</p>
+</div>
+<script>
+(function() {
+  var ring = document.getElementById('psBreatheRing');
+  var timer = document.getElementById('psTimer');
+  var btn = document.getElementById('psTriggerBtn');
+  var pTitle = document.getElementById('psPromptTitle'), pDesc = document.getElementById('psPromptDesc');
+  var chips = document.querySelectorAll('.pausette-stage .app-chip');
+  var isBreathing = false;
+  var breatheInterval = null;
+
+  var descriptions = {
+    '20': { time: '19:45', title: "Eye break (20-20-20 rule)", desc: "Every 20 minutes, spend 20 seconds looking at something 20 feet away to relax your eyes." },
+    '50': { time: '48:30', title: "Focus cycle (50 / 10)", desc: "Fifty minutes of deep work, followed by ten minutes to stretch, hydrate, and stand up." },
+    '5': { time: '04:50', title: "Micro-rest (5 min)", desc: "A quick five-minute pause to reset posture and release neck and shoulder tension." }
+  };
+
+  btn.addEventListener('click', function() {
+    isBreathing = !isBreathing;
+    ring.classList.toggle('expand', isBreathing);
+    if (isBreathing) {
+      var sec = 20;
+      timer.textContent = '00:' + (sec < 10 ? '0' : '') + sec;
+      breatheInterval = setInterval(function() {
+        sec--;
+        if (sec <= 0) {
+          clearInterval(breatheInterval);
+          ring.classList.remove('expand');
+          isBreathing = false;
+          timer.textContent = '19:45';
+        } else {
+          timer.textContent = '00:' + (sec < 10 ? '0' : '') + sec;
+        }
+      }, 1000);
+    } else {
+      clearInterval(breatheInterval);
+      timer.textContent = '19:45';
+    }
+  });
+
+  chips.forEach(function(c) {
+    c.addEventListener('click', function() {
+      chips.forEach(function(x) { x.classList.remove('active'); });
+      c.classList.add('active');
+      var r = c.getAttribute('data-rule');
+      var d = descriptions[r];
+      if (!d) return;
+      if (!isBreathing) timer.textContent = d.time;
+      pTitle.textContent = d.title;
+      pDesc.textContent = d.desc;
+    });
+  });
+})();
+</script>
 
 <!-- family:shot --><figure class="shot"><img src="../img/hero.jpg" alt="" width="1600" height="860"></figure><!-- /family:shot -->
 <section class="card">
@@ -127,6 +203,48 @@
   <p>Klik cincin itu untuk melihat bila setiap rehat tiba, mengambil satu lebih awal, menjeda selama setengah jam atau sehingga esok, dan melihat berapa kali anda berehat, berapa yang berlaku dengan sendirinya semasa anda tiada, dan berapa lama anda sudah berada di Mac hari ini. Kad <em>Minggu ini</em> menunjukkan rehat bagi setiap hari dalam tujuh hari terakhir dan masa anda di Mac.</p>
 </section>
 
+<section class="card comparison-card" id="comparison">
+  <h2>Nagging lockout apps vs Pausette</h2>
+  <p class="section-lead">Healthy screen habits and posture without frustrating interruptions or locked screens.</p>
+  <div class="table-scroll">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Aspect</th>
+          <th>Aggressive Lockout Apps</th>
+          <th class="highlight-col">Pausette</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Screen Interruption</strong></td>
+          <td>Brutally locks keyboard and screen mid-sentence</td>
+          <td class="highlight-col"><strong>Polite, gentle notices that never ruin client calls</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Alarm Sound</strong></td>
+          <td>Jarring harsh buzzer that startles colleagues</td>
+          <td class="highlight-col"><strong>Gentle harmonic synthesized chimes</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Eye Strain (20-20-20)</strong></td>
+          <td>Only generic long break intervals</td>
+          <td class="highlight-col"><strong>Dedicated 20-second micro-breaks to relax eye muscles</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Idle Awareness</strong></td>
+          <td>Counts down even when you have walked away</td>
+          <td class="highlight-col"><strong>Smart idle detection pauses timer when away from desk</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Resource Footprint</strong></td>
+          <td>Heavy multi-gigabyte Electron runtime</td>
+          <td class="highlight-col"><strong>Pure Swift menu bar app with virtually 0% CPU consumption</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 <section class="card">
   <h2>Privasi dalam satu perenggan</h2>
   <p>Pausette hanya memerhatikan tiga perkara: sama ada anda sedang menggunakan Mac, sama ada mikrofon sedang digunakan, dan sama ada app di hadapan dalam skrin penuh. Ia tiada akses rangkaian, tiada akaun dan tiada penjejakan, dan kiraan rehat 30 hari terakhir kekal pada Mac anda. <a href="privacy.html">Dasar privasi</a> penuh menyatakan perkara yang sama dengan lebih terperinci.</p>
